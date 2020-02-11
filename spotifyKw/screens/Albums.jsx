@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import AlbumCard from '../components/Albums/AlbumCard';
 
-
 const AlbumsDummies = [
     {
         title: 'Avenged sevenfold',

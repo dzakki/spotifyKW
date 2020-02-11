@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "Blank Template",
-    "slug": "spotifyKw",
+    "name": "Spotify KW",
+    "slug": "spotifykw",
     "privacy": "public",
     "sdkVersion": "36.0.0",
+    "scheme": "spotify-kw",
     "platforms": [
       "ios",
       "android",
