@@ -5,29 +5,37 @@ import {
     TouchableHighlight, 
     ScrollView, 
     Image,
-    StyleSheet 
+    FlatList,
+    StyleSheet,
+    YellowBox
 } from 'react-native';
+YellowBox.ignoreWarnings(['VirtualizedLists should never be nested']);
+import AlbumDetailHeader from '../components/AlbumDetails/AlbumDetailHeader';
+import MusicList from '../components/AlbumDetails/MusicList';
+
+import { musicDummies } from '../dummies';
 
 export default class DetailAlbum extends React.Component {
 
+    constructor(props) {
+        super(props)
+    }
+
     render(){
+        const { item } = this.props.route.params
         return (
             <ScrollView>
                 <View style={{
                     marginTop: 10
                 }}></View>
-                <View style={styles.HeaderContainer}>
-                    <Image
-                        style={{
-                            width: '50%', 
-                            height: 200,
-                            opacity: 1,
-                            backgroundColor: 'transparent'
-                        }}
-                        source={{uri: 'https://yt3.ggpht.com/a/AGF-l795x6DhDU9NkZFUw_6dqoiBtR9yQc7GaBtBhQ=s900-c-k-c0xffffffff-no-rj-mo'}}
-                    />
-                <Text style={styles.titleAlbum}>Avenged sevendfold</Text>
-                <Text style={styles.madeAlbum}>by Spotify</Text>
+                <AlbumDetailHeader item={item} />
+                <View style={styles.bodyContainer}>
+                    <FlatList
+                        data={musicDummies}
+                        renderItem={(music) => <MusicList item={music} /> }
+                        keyExtractor={ (music) => music.title }
+                    > 
+                    </FlatList>       
                 </View>
             </ScrollView>
         )
@@ -35,22 +43,10 @@ export default class DetailAlbum extends React.Component {
 
 }
 
+
 const styles = StyleSheet.create({
-    HeaderContainer :{
+    bodyContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    titleAlbum: {
-        marginTop: 10,
-        fontFamily: 'sans-serif',
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 20,
-    },
-    madeAlbum: {
-        marginTop: 10,
-        fontWeight: '300',
-        color: '#fff'
+        marginTop: 10
     }
 })
