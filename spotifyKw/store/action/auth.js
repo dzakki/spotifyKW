@@ -19,25 +19,30 @@ export const _refreshTokenAction =  (token) => async dispatch => {
             body: `grant_type=refresh_token&refresh_token=${token}`,
         })
         const respJson = await response.json()
-        const {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            expires_in: expiresIn,
-        } = respJson;
-        const expirationTime = new Date().getTime() + expiresIn * 1000;
-        // console.log('access_token: '+accessToken, 'refreshToken: '+ refreshToken, 'expirationTime: '+expirationTime)
-        await AsyncStorage.setItem('accessToken',  accessToken.toString())
-        await AsyncStorage.setItem('refreshToken', refreshToken.toString())
-        await AsyncStorage.setItem('expirationTime', expirationTime.toString()) 
-        dispatch({
-            type: ISLOGGED,
-            data: {
-                token: accessToken,
-                refreshToken: refreshToken,
-                expirationTime: expirationTime
-            }
-        })
+        if (respJson.error === undefined) {
+            const {
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                expires_in: expiresIn,
+            } = respJson;
+            const expirationTime = new Date().getTime() + expiresIn * 1000;
+            console.log('access_token: '+accessToken, 'refreshToken: '+ refreshToken, 'expirationTime: '+expirationTime)
+            await AsyncStorage.setItem('accessToken',  accessToken.toString())
+            await AsyncStorage.setItem('refreshToken', refreshToken.toString())
+            await AsyncStorage.setItem('expirationTime', expirationTime.toString()) 
+            dispatch({
+                type: ISLOGGED,
+                data: {
+                    token: accessToken,
+                    refreshToken: refreshToken,
+                    expirationTime: expirationTime
+                }
+            })   
+        }else{
+            throw 'error'
+        }
     } catch (error) {
+        await AsyncStorage.clear()
         console.log(error, '_refreshTokenAction')
     }
 }
@@ -50,7 +55,7 @@ export const isLoggedAction =  () => async (dispatch, state) => {
         const expirationTime = await AsyncStorage.getItem(EXPIRATION_TIME);
         if (accessToken && refreshToken && expirationTime) {
             if (new Date().getTime() > Number(expirationTime)) {
-                dispatch(_refreshTokenAction(token))
+                dispatch(_refreshTokenAction(refreshToken))
             }else{
                 dispatch({
                     type: ISLOGGED,
@@ -66,7 +71,7 @@ export const isLoggedAction =  () => async (dispatch, state) => {
         const {token, refreshToken, expirationTime} = general
         if (token && refreshToken && expirationTime) {
             if (new Date().getTime() > Number(expirationTime)) {
-                dispatch(_refreshTokenAction(token))
+                dispatch(_refreshTokenAction(refreshToken))
             }
         }else{
             dispatch({
@@ -113,4 +118,11 @@ export const loginAction = (authorizationCode) => async (dispatch, state) => {
     }
 }
 
-
+export const logoutAction = () => async dispatch => {
+    dispatch({ type: GENERAL_ONLOAD });
+    await AsyncStorage.clear()
+    dispatch({
+        type: ISLOGGED,
+        data: null
+    })
+}

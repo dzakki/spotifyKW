@@ -1,33 +1,38 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function MusicList(props) {
     const { item } = props.item
+    console.log(item.id)
+    const navigation = useNavigation()
     return (
-        <View style={styles.musicWrapper}>
-            <View style={{
-                width: '95%',
-                justifyContent: "center",
-            }}>
-                <Text style={styles.textWhite}>
-                    {item.title}
-                </Text>
-                <Text style={styles.textLight}>
-                    {item.band}
-                </Text>
+        <TouchableWithoutFeedback onPress={ () =>  navigation.navigate('PlayTrack', item ) }>
+            <View style={styles.musicWrapper}>
+                <View style={{
+                    width: '95%',
+                    justifyContent: "center",
+                }}>
+                    <Text style={styles.textWhite}>
+                        {item.name}
+                    </Text>
+                    <Text style={styles.textLight}>
+                        {item.artists[0].name}
+                    </Text>
+                </View>
+                <View style={{
+                    justifyContent: "center",
+                    width: '5%'
+                }}>
+                    <Text style={[styles.textLight, {
+                        textAlign: 'right',
+                    }]}>
+                        <Ionicons name='md-more' size={25} color="#999"/>
+                    </Text>
+                </View>
             </View>
-            <View style={{
-                justifyContent: "center",
-                width: '5%'
-            }}>
-                <Text style={[styles.textLight, {
-                    textAlign: 'right',
-                }]}>
-                    <Ionicons name='md-more' size={25} color="#999"/>
-                </Text>
-            </View>
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
 

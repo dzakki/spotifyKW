@@ -11,6 +11,7 @@ web-build/
 web-report/
 config
 sandbox.js
+bak
 
 # macOS
 .DS_Store

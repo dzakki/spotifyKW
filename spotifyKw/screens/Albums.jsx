@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { 
     View, 
     ScrollView, 
     Text, 
     StyleSheet, 
-    Image,
     FlatList,
+    ActivityIndicator
 } from 'react-native';
+import Indicator from '../components/Indicator';
+import { getRecentlyPlayed } from "../store/action/spotify";
 import AlbumCard from '../components/Albums/AlbumCard';
 
 const AlbumsDummies = [
@@ -25,6 +28,34 @@ const AlbumsDummies = [
 ]
 
 export default function Albums() {
+    const { recentlyPlayed, onload_recentlyPlayed } = useSelector(state => state.spotify)
+    const dispatch = useDispatch()
+    // console.log('spotifyState ==========>' ,recentlyPlayed && recentlyPlayed.length ? recentlyPlayed[0].track.album : 'belum ada')
+    useEffect(() => {
+        dispatch(getRecentlyPlayed())
+    }, [])
+
+    const render = () => {
+        return (
+            <View style={styles.row}>
+                <FlatList
+                    data={recentlyPlayed}
+                    numColumns={2}
+                    columnWrapperStyle={styles.row}
+                    renderItem={({item}) => {
+                        // console.log(item, '===================')
+                        return (
+                            <View style={styles.col}>
+                                <AlbumCard item={item.track.album} />
+                            </View>
+                        )
+                    }}
+                    keyExtractor={item => item.track.album.id}
+                />
+            </View>
+        )
+    }
+
     return (
         <View>
             <ScrollView>
@@ -32,24 +63,14 @@ export default function Albums() {
                     <View style={styles.titleWrapper}>
                         <Text style={styles.title}>Made for you</Text>
                     </View>
-                    <View style={styles.row}>
-
-                        <FlatList
-                            data={AlbumsDummies}
-                            numColumns={2}
-                            columnWrapperStyle={styles.row}
-                            renderItem={(item) => {
-                                return (
-                                    <View style={styles.col}>
-                                        <AlbumCard item={item} />
-                                    </View>
-                                )
-                            }}
-                            keyExtractor={item => item.url}
-                        >
-
-                        </FlatList>
-                    </View>
+            {
+                onload_recentlyPlayed
+                    ? <Indicator />
+                    : recentlyPlayed && recentlyPlayed.length
+                        ?  render()
+                        : <Text style={[styles.title, { fontSize: 15 }]}>Empty playlist</Text>
+            }
+            
                 </View>
             </ScrollView>
         </View>

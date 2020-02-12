@@ -4,8 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function AlbumCard(props) {
     const navigation = useNavigation()
-    const { item } = props.item
-    item.titlePage = item.title
+    const { item } = props
+    // console.log(item, '=0-=-=-===0-=0=-9-9-9')
+    // item.titlePage = item.name
     return (
         <TouchableHighlight
             underlayColor="transparent"
@@ -20,9 +21,9 @@ export default function AlbumCard(props) {
                         height: 180,
                         opacity: 0.9
                     }}
-                    source={{uri: item.url}}
+                    source={{uri: item.images[1].url}}
                 />
-                <Text style={styles.textWhite}>{item.title}</Text>
+                <Text style={styles.textWhite}>{item.name}</Text>
             </View>
         </TouchableHighlight>
     )

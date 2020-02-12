@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import spotify from './spotifyReducer';
 import { ISLOGGED, ERRORS, SUCCESS, GENERAL_ONLOAD } from '../actionTypes';
 
 const initialState = {
@@ -39,5 +40,6 @@ function general(state = initialState, action) {
 }
 
 export default combineReducers({
-    general
+    general,
+    spotify
 })

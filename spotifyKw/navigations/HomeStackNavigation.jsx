@@ -7,6 +7,10 @@ import CustomHeader from '../components/CustomHeader';
 import Albums from "../screens/Albums";
 import HomeHeader from "../components/HomeHeader";
 import AlbumDetails from '../screens/AlbumDetails';
+import Settings from '../screens/Settings';
+import SettingsHeader from '../components/SettingsHeader';
+import PlayTrack from '../screens/PlayTrack';
+import PlayTrackHeader from '../components/PlayTrackHeader';
 
 const Stack = createStackNavigator()
 
@@ -30,6 +34,24 @@ export default function HomeStackNavigation() {
                 options={{
                     header: ( { scene, previous, navigation } ) => {
                         return <CustomHeader scene={scene} previous={previous} navigation={navigation} />
+                    }
+                }}
+            />
+            <Stack.Screen 
+                name="Settings"
+                component={Settings}
+                options={{
+                    header: ( { scene, previous, navigation } ) => {
+                        return <SettingsHeader scene={scene} previous={previous} navigation={navigation} />
+                    }
+                }}
+            />
+            <Stack.Screen 
+                name="PlayTrack"
+                component={PlayTrack}
+                options={{
+                    header: ( { scene, previous, navigation } ) => {
+                        return <PlayTrackHeader scene={scene} previous={previous} navigation={navigation} />
                     }
                 }}
             />

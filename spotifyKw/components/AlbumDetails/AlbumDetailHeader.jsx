@@ -13,9 +13,9 @@ export default function AlbumDetailHeader(props) {
                     opacity: 1,
                     backgroundColor: 'transparent'
                 }}
-                source={{uri: item.url}}
+                source={{uri: item.images[1].url}}
             />
-            <Text style={styles.titleAlbum}>{ item.title}</Text>
+            <Text style={styles.titleAlbum}>{ item.name }</Text>
             <Text style={styles.madeAlbum}>by Spotify</Text>
         </View>
     )
